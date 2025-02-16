@@ -1,0 +1,30 @@
+# 🌟 Systemowe pliki macOS
+.DS_Store
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Maven
+.mvn/
+target/
+build/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.next
+release.properties
+
+# Logs
+logs/
+*.log
+
+# Private
+*.key
+*.pem
+application.properties
+application.yml
+
+# Another
+HELP.md
