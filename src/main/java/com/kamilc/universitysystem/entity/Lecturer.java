@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "lecturers")
 @Getter
@@ -15,7 +18,7 @@ import lombok.Setter;
 public class Lecturer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 
     @Column(name = "academic_title")
@@ -25,6 +28,20 @@ public class Lecturer {
     private String academicDegree;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User lecturerUser;
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    private User user;
+
+    @OneToMany(mappedBy = "lecturer", cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+            CascadeType.REFRESH
+    })
+    private List<Grade> grades = new ArrayList<>();
+
+    @OneToMany(mappedBy = "lecturer", cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+            CascadeType.REFRESH
+    })
+    private List<Subject> subjects = new ArrayList<>();
 }

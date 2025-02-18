@@ -10,37 +10,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "students_groups")
+@Table(name = "semesters")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudentGroup {
+public class Semester {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 
-    @Column(name = "name", nullable = false, unique = true)
-    private String name;
+    @Column(name = "semester")
+    private Integer semester;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "group_type", nullable = false)
-    private GroupType groupType;
+    @ManyToOne
+    @JoinColumn(name = "field_of_study", nullable = false)
+    private FieldOfStudy fieldOfStudy;
 
-    @OneToMany(mappedBy = "studentGroup", cascade = {
+    @OneToMany(mappedBy = "semester", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StudentGroup> studentGroups = new ArrayList<>();
+
+    @OneToMany(mappedBy = "semester", cascade = {
             CascadeType.PERSIST,
             CascadeType.MERGE,
             CascadeType.REFRESH
     })
-    private List<Student> students = new ArrayList<>();
+    private List<Subject> subjects = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "semester_id", nullable = false)
-    private Semester semester;
-
-    public enum GroupType {
-        FULL_TIME, PART_TIME
-    }
 }

@@ -24,39 +24,39 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 
     @NotBlank(message = "Email is mandatory")
     @Email(message = "Email should be valid")
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @NotBlank(message = "Password is mandatory")
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     @NotBlank(message = "Name is mandatory")
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String name;
 
     @NotBlank(message = "Surname is mandatory")
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String surName;
 
     @CreatedDate
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false, nullable = false)
     private Timestamp createdAt;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     private UserRole role;
 
-    @OneToMany(mappedBy = "studentUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Student> students = new ArrayList<>();
 
-    @OneToMany(mappedBy = "lecturerUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Lecturer> lecturers = new ArrayList<>();
 

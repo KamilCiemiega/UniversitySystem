@@ -3,7 +3,7 @@ package com.kamilc.universitysystem.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,24 +22,41 @@ public class Grade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 
-    @Column(name = "grade", precision = 3, scale = 1, nullable = false)
     @DecimalMin(value = "2.0", message = "Grade must be at least 2.0")
     @DecimalMax(value = "5.0", message = "Grade cannot be higher than 5.0")
-    @NotBlank(message = "Grade is mandatory")
+    @NotNull(message = "Grade is mandatory")
+    @Column(name = "grade" , nullable = false)
     private Double grade;
 
-    @NotBlank(message = "Weight is mandatory")
-    @Column(name = "weight", nullable = false)
+    @NotNull(message = "Weight is mandatory")
+    @Column(name = "weight", nullable = false, updatable = false)
     private Integer weight;
 
     @CreatedDate
-    @Column(name = "graded_at")
+    @Column(name = "graded_at", updatable = false, nullable = false)
     private Timestamp gradedAt;
 
     @Lob
     @Column(name = "comment", columnDefinition = "TEXT")
     private String comment;
+
+    @ManyToOne
+    @JoinColumn(name = "student_id", nullable = false)
+    private Student student;
+
+    @ManyToOne
+    @JoinColumn(name = "lecturer_id", foreignKey = @ForeignKey(
+            name = "fk_grade_lecturer", value = ConstraintMode.CONSTRAINT
+    ))
+    private Lecturer lecturer;
+
+    @ManyToOne
+    @JoinColumn(name = "subject_id",
+            foreignKey = @ForeignKey(
+                    name = "fk_subject", value = ConstraintMode.CONSTRAINT
+            ))
+    private Subject subject;
 }

@@ -20,16 +20,16 @@ public class FieldOfStudy {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @OneToMany(mappedBy = "fieldOfStudy", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StudentGroup> studentGroups = new ArrayList<>();
+    private List<EducationScope> educationScopes = new ArrayList<>();
 
     @OneToMany(mappedBy = "fieldOfStudy", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<EducationScope> educationScopes = new ArrayList<>();
+    private List<Semester> semesters = new ArrayList<>();
 
 }
