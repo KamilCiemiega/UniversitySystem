@@ -11,6 +11,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class User {
 
     @CreatedDate
     @Column(name = "created_at", updatable = false, nullable = false)
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
@@ -60,5 +61,10 @@ public class User {
     @JsonIgnore
     private List<Lecturer> lecturers = new ArrayList<>();
 
-    public enum UserRole {STUDENT, LECTURER}
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Token> tokens = new ArrayList<>();
+
+    public enum UserRole {STUDENT, LECTURER, ADMIN}
+
 }
