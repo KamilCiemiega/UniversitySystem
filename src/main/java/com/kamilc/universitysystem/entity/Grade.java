@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
@@ -37,7 +37,7 @@ public class Grade {
 
     @CreatedDate
     @Column(name = "graded_at", updatable = false, nullable = false)
-    private Timestamp gradedAt;
+    private LocalDateTime gradedAt;
 
     @Lob
     @Column(name = "comment", columnDefinition = "TEXT")
@@ -48,15 +48,10 @@ public class Grade {
     private Student student;
 
     @ManyToOne
-    @JoinColumn(name = "lecturer_id", foreignKey = @ForeignKey(
-            name = "fk_grade_lecturer", value = ConstraintMode.CONSTRAINT
-    ))
+    @JoinColumn(name = "lecturer_id")
     private Lecturer lecturer;
 
     @ManyToOne
-    @JoinColumn(name = "subject_id",
-            foreignKey = @ForeignKey(
-                    name = "fk_subject", value = ConstraintMode.CONSTRAINT
-            ))
+    @JoinColumn(name = "subject_id")
     private Subject subject;
 }

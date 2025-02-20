@@ -6,5 +6,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AdditionalSubjectEnrollmentRepository extends JpaRepository<AdditionalSubjectEnrollment, AdditionalSubjectEnrollmentId> {
-}
+public interface AdditionalSubjectEnrollmentRepository extends JpaRepository<AdditionalSubjectEnrollment, AdditionalSubjectEnrollmentId> {}

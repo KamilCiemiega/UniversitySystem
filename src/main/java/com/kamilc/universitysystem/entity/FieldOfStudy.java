@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "students_groups")
+@Table(name = "fields_of_study")
 @Getter
 @Setter
 @NoArgsConstructor

@@ -28,10 +28,7 @@ public class Student {
     private String albumNumber;
 
     @ManyToOne
-    @JoinColumn(name = "group_id", nullable = true,
-            foreignKey = @ForeignKey(
-                    name = "fk_student_group", value = ConstraintMode.CONSTRAINT
-            ))
+    @JoinColumn(name = "group_id", nullable = true)
     private StudentGroup studentGroup;
 
     @NotBlank(message = "User Id is mandatory")
@@ -40,13 +37,13 @@ public class Student {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "education_scope_id", nullable = true,
-            foreignKey = @ForeignKey(
-                    name = "fk_education_scope", value = ConstraintMode.CONSTRAINT
-            ))
+    @JoinColumn(name = "education_scope_id", nullable = true)
     private EducationScope educationScope;
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Grade> grades = new ArrayList<>();
+
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AdditionalSubjectEnrollment> additionalSubjectEnrollments = new ArrayList<>();
 
 }

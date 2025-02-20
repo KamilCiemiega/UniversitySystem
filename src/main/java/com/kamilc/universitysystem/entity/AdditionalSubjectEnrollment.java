@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "additional_subject_enrollments")
@@ -32,6 +32,6 @@ public class AdditionalSubjectEnrollment {
 
     @CreatedDate
     @Column(name = "enrolled_at", nullable = false, updatable = false)
-    private Timestamp enrolledAt;
+    private LocalDateTime enrolledAt;
 
 }

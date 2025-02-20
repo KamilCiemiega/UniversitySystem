@@ -9,14 +9,11 @@ import java.util.Base64;
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
-    private String secretKey;
-
-    public Key getSecretKey() {
-        byte[] decodedKey = Base64.getDecoder().decode(secretKey);
-        return Keys.hmacShaKeyFor(decodedKey);
-    }
-
-
-
+//    @Value("${jwt.secret}")
+//    private String secretKey;
+//
+//    public Key getSecretKey() {
+//        byte[] decodedKey = Base64.getDecoder().decode(secretKey);
+//        return Keys.hmacShaKeyFor(decodedKey);
+//    }
 }

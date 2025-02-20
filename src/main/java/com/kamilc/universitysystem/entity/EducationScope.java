@@ -45,7 +45,7 @@ public class EducationScope {
             CascadeType.MERGE,
             CascadeType.REFRESH
     })
-    private List<EducationScope> educationScopes = new ArrayList<>();
+    private List<Subject> subjects = new ArrayList<>();
 
 
 

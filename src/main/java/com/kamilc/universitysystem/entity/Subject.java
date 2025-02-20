@@ -42,17 +42,11 @@ public class Subject {
     private Semester semester;
 
     @ManyToOne
-    @JoinColumn(name = "education_scope_id",
-            foreignKey = @ForeignKey(
-                    name = "fk_education_scopes", value = ConstraintMode.CONSTRAINT
-            ))
+    @JoinColumn(name = "education_scope_id")
     private EducationScope educationScope;
 
     @ManyToOne
-    @JoinColumn(name = "lecturer_id",
-            foreignKey = @ForeignKey(
-            name = "fk_lecturer", value = ConstraintMode.CONSTRAINT
-    ))
+    @JoinColumn(name = "lecturer_id")
     private Lecturer lecturer;
 
     @OneToMany(mappedBy = "subject", cascade = {
@@ -61,6 +55,9 @@ public class Subject {
             CascadeType.REFRESH
     })
     private List<Grade> grades = new ArrayList<>();
+
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AdditionalSubjectEnrollment> additionalSubjectEnrollments = new ArrayList<>();
 
 
     public enum SubjectType {CORE, ADDITIONAL}
