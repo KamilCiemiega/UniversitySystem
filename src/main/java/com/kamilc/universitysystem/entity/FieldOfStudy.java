@@ -1,6 +1,7 @@
 package com.kamilc.universitysystem.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,4 +33,7 @@ public class FieldOfStudy {
     @OneToMany(mappedBy = "fieldOfStudy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Semester> semesters = new ArrayList<>();
 
+    @ManyToMany(mappedBy = "fieldsOfStudy")
+    @JsonIgnore
+    private List<User> users = new ArrayList<>();
 }

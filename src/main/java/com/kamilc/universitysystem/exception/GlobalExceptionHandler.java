@@ -29,12 +29,12 @@ public class GlobalExceptionHandler {
 
             if (constraintName != null) {
                 Map<String, String> constraintMessages = Map.of(
-                        "email", "Email is already taken",
-                        "token", "Token is already taken",
+                        "users.unique_users_email", "Email is already taken",
+                        "tokens.unique_tokens_token", "Token is already taken",
                         "unique_fields_of_study_name", "Field of study with this name already exists",
-                        "name_UNIQUE", "Subject name already exist",
+                        "subjects.unique_subjects_name_UNIQUE", "Subject name already exist",
                         "unique_students_group_name", "Student group with that name already exists",
-                        "album_number", "Student with that album number already exists"
+                        "students.unique_students_album_number", "Student with that album number already exists"
                 );
 
                 errors.put("error", constraintMessages.getOrDefault(constraintName, "Database constraint violation: " + constraintName));

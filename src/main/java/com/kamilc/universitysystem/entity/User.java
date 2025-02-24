@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -45,7 +47,7 @@ public class User {
     private String surName;
 
     @CreatedDate
-    @Column(name = "created_at", updatable = false, nullable = false)
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
@@ -64,6 +66,14 @@ public class User {
     @JsonIgnore
     private List<Token> tokens = new ArrayList<>();
 
-    public enum UserRole {STUDENT, LECTURER, ADMIN}
+    @ManyToMany
+    @JoinTable(
+            name = "users_fields_of_study",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "field_of_study_id")
+    )
+    @JsonIgnore
+    private List<FieldOfStudy> fieldsOfStudy = new ArrayList<>();
 
+    public enum UserRole {STUDENT, LECTURER, ADMIN}
 }

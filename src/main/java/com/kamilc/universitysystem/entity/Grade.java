@@ -13,7 +13,7 @@ import org.springframework.data.annotation.CreatedDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "grades")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -31,12 +31,11 @@ public class Grade {
     @Column(name = "grade" , nullable = false)
     private Double grade;
 
-    @NotNull(message = "Weight is mandatory")
-    @Column(name = "weight", nullable = false, updatable = false)
+    @Column(name = "weight")
     private Integer weight;
 
     @CreatedDate
-    @Column(name = "graded_at", updatable = false, nullable = false)
+    @Column(name = "graded_at", updatable = false)
     private LocalDateTime gradedAt;
 
     @Lob
