@@ -27,6 +27,10 @@ public class FieldOfStudy {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "study_type", nullable = false)
+    private FieldOfStudy.StudyType studyType;
+
     @OneToMany(mappedBy = "fieldOfStudy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EducationScope> educationScopes = new ArrayList<>();
 
@@ -36,4 +40,8 @@ public class FieldOfStudy {
     @ManyToMany(mappedBy = "fieldsOfStudy")
     @JsonIgnore
     private List<User> users = new ArrayList<>();
+
+    public enum StudyType {
+        FULL_TIME, PART_TIME
+    }
 }

@@ -5,37 +5,35 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "students_groups")
+@Table(name = "reserve_groups")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudentGroup {
+public class ReserveGroup {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
     private Integer id;
 
-    @Column(name = "name", nullable = false, unique = true)
-    private String name;
+    @Column(name = "number_of_students")
+    private Integer numberOfStudents;
 
-    @Column(name = "available_slots")
-    private Integer availableSlots;
-
-    @OneToMany(mappedBy = "studentGroup", cascade = {
-            CascadeType.PERSIST,
+    @OneToMany(mappedBy = "reserveGroup", cascade = {
             CascadeType.MERGE,
+            CascadeType.PERSIST,
             CascadeType.REFRESH
     })
     private List<Student> students = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "semester_id", nullable = false)
+    @OneToOne(mappedBy = "reserveGroup")
     private Semester semester;
 }

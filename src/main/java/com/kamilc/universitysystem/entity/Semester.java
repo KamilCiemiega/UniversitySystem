@@ -26,7 +26,7 @@ public class Semester {
     private Integer semester;
 
     @ManyToOne
-    @JoinColumn(name = "field_of_study", nullable = false)
+    @JoinColumn(name = "field_of_study_id", nullable = false)
     private FieldOfStudy fieldOfStudy;
 
     @OneToMany(mappedBy = "semester", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -38,5 +38,9 @@ public class Semester {
             CascadeType.REFRESH
     })
     private List<Subject> subjects = new ArrayList<>();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "reserve_group_id", unique = true)
+    private ReserveGroup reserveGroup;
 
 }
