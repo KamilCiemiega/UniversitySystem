@@ -1,12 +1,16 @@
 package com.kamilc.universitysystem.controller;
 
-import com.kamilc.universitysystem.controller.dto.NewUserDTO;
-import com.kamilc.universitysystem.controller.dto.UserResponseDTO;
+import com.kamilc.universitysystem.controller.dto.userDTOs.LoggedUserResponseDTO;
+import com.kamilc.universitysystem.controller.dto.userDTOs.LoginUserDTO;
+import com.kamilc.universitysystem.controller.dto.userDTOs.NewUserDTO;
+import com.kamilc.universitysystem.controller.dto.userDTOs.RegisterUserResponseDTO;
 import com.kamilc.universitysystem.service.UserService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +29,14 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public UserResponseDTO saveNewUser(@RequestBody @Valid NewUserDTO newUserDTO) {
-        return userService.saveNewUser(newUserDTO);
+    public ResponseEntity<RegisterUserResponseDTO> registerNewUser(@RequestBody @Valid NewUserDTO newUserDTO) {
+        RegisterUserResponseDTO registerUser = userService.registerNewUser(newUserDTO);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(registerUser);
+    }
+
+    @PostMapping("/login")
+    public LoggedUserResponseDTO loginUser(@RequestBody @Valid LoginUserDTO loginUserDTO){
+        return userService.loginUser(loginUserDTO);
     }
 }

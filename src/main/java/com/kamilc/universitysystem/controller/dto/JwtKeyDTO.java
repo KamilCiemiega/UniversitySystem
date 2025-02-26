@@ -1,14 +1,16 @@
 package com.kamilc.universitysystem.controller.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class UserResponseDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+public class JwtKeyDTO {
     private Integer id;
-    private String email;
-    private String name;
-    private String surName;
     private String createdAt;
+    private Boolean isActive;
 }

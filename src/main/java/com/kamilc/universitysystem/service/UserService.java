@@ -1,9 +1,11 @@
 package com.kamilc.universitysystem.service;
 
-import com.kamilc.universitysystem.controller.dto.NewUserDTO;
-import com.kamilc.universitysystem.controller.dto.UserResponseDTO;
-import com.kamilc.universitysystem.entity.User;
+import com.kamilc.universitysystem.controller.dto.userDTOs.LoggedUserResponseDTO;
+import com.kamilc.universitysystem.controller.dto.userDTOs.LoginUserDTO;
+import com.kamilc.universitysystem.controller.dto.userDTOs.NewUserDTO;
+import com.kamilc.universitysystem.controller.dto.userDTOs.RegisterUserResponseDTO;
 
 public interface UserService {
-    UserResponseDTO saveNewUser(NewUserDTO userDTO);
+    RegisterUserResponseDTO registerNewUser(NewUserDTO userDTO);
+    LoggedUserResponseDTO loginUser(LoginUserDTO loginUserDTO);
 }
