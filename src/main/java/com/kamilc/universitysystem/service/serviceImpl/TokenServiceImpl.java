@@ -1,7 +1,6 @@
 package com.kamilc.universitysystem.service.serviceImpl;
 
 import com.kamilc.universitysystem.dao.TokenRepository;
-import com.kamilc.universitysystem.entity.Token;
 import com.kamilc.universitysystem.security.JwtUtil;
 import com.kamilc.universitysystem.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;

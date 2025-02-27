@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
-
     private final UserMapper userMapper;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -35,7 +34,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public RegisterUserResponseDTO registerNewUser(NewUserDTO userDTO) {
-
         User user = userMapper.toEntity(userDTO);
         user.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
         User savedUser = userRepository.save(user);

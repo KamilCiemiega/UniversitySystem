@@ -55,7 +55,7 @@ public class JwtUtil {
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
-
+    //Claims
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .setSigningKey(SIGNING_KEY)
