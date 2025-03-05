@@ -45,9 +45,7 @@ public class JwtUtil {
     }
 
     public String generateRefreshToken(String email) {
-        String jti = UUID.randomUUID().toString(); // Generowanie unikalnego token_id (jti)
         return Jwts.builder()
-                .setId(jti)
                 .subject(email)
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + REFRESH_EXPIRATION))
