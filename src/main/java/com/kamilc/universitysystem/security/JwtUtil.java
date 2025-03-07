@@ -70,4 +70,29 @@ public class JwtUtil {
         return claimsResolver.apply(claims);
     }
 
+
+//    @Autowired
+//    private JwtKeyRepository jwtKeyRepository;
+//
+//    public String getCurrentSecretKey() {
+//        return jwtKeyRepository.findByIsActiveTrue()
+//                .map(JwtKey::getSecretKey)
+//                .orElseThrow(() -> new RuntimeException("Brak aktywnego klucza JWT w bazie danych!"));
+//    }
+//
+//    public void rotateKeys() {
+//        jwtKeyRepository.findAll().forEach(k -> {
+//            k.setIsActive(false);
+//            jwtKeyRepository.save(k);
+//        });
+//
+//        String newSecret = Base64.getEncoder().encodeToString(UUID.randomUUID().toString().getBytes());
+//
+//        JwtKey newKey = new JwtKey();
+//        newKey.setSecretKey(newSecret);
+//        newKey.setCreatedAt(Instant.now());
+//        newKey.setIsActive(true);
+//        jwtKeyRepository.save(newKey);
+//    }
+
 }
