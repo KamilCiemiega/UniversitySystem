@@ -24,13 +24,13 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    //
-//    @Autowired
-//    public UserServiceImpl(UserMapper userMapper, UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
-//        this.userMapper = userMapper;
-//        this.userRepository = userRepository;
-//        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-//    }
+
+    @Autowired
+    public UserServiceImpl(UserMapper userMapper, UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        this.userMapper = userMapper;
+        this.userRepository = userRepository;
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
 
     @Override
     @Transactional
