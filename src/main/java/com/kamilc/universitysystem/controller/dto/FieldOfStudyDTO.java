@@ -13,5 +13,6 @@ public class FieldOfStudyDTO {
     private Integer id;
     private String name;
     private Integer semesterId;
+
 //    private List<SemesterDTO> semesterDTOS = new ArrayList<>();
 }

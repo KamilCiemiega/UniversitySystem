@@ -5,9 +5,6 @@ import com.kamilc.universitysystem.controller.dto.userDTOs.RegisterUserResponseD
 import com.kamilc.universitysystem.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Mapper(componentModel = "spring", uses = LocalDateTimeMapper.class)
 public interface UserMapper {
