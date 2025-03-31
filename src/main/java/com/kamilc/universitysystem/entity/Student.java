@@ -45,9 +45,4 @@ public class Student {
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AdditionalSubjectEnrollment> additionalSubjectEnrollments = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name = "reserve_group_id")
-    private ReserveGroup reserveGroup;
-
 }

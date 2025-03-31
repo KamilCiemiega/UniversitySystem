@@ -38,9 +38,4 @@ public class Semester {
             CascadeType.REFRESH
     })
     private List<Subject> subjects = new ArrayList<>();
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "reserve_group_id", unique = true)
-    private ReserveGroup reserveGroup;
-
 }

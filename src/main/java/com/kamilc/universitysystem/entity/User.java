@@ -56,12 +56,12 @@ public class User {
     @Column(name = "role", nullable = false)
     private UserRole role;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Student> students = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Lecturer> lecturers = new ArrayList<>();
 
     @ManyToMany
@@ -72,6 +72,10 @@ public class User {
     )
     @JsonIgnore
     private List<FieldOfStudy> fieldsOfStudy = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Application> applications = new ArrayList<>();
 
     public enum UserRole {STUDENT, LECTURER, ADMIN}
 }

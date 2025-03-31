@@ -39,15 +39,25 @@ public class FieldOfStudy {
     @Column(name = "available_slots", nullable = false)
     private Integer availableSlots;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "fieldOfStudy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EducationScope> educationScopes = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "fieldOfStudy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Semester> semesters = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "fieldsOfStudy")
     @JsonIgnore
+    @ManyToMany(mappedBy = "fieldsOfStudy")
     private List<User> users = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "fieldOfStudy", cascade = {
+            CascadeType.MERGE,
+            CascadeType.PERSIST,
+            CascadeType.REFRESH
+    }, orphanRemoval = true)
+    private List<Application> applications = new ArrayList<>();
 
     public enum StudyType {
         FULL_TIME, PART_TIME

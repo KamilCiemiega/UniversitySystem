@@ -1,5 +1,6 @@
 package com.kamilc.universitysystem.entity;
 
+import com.kamilc.universitysystem.domain.converter.ApplicationDataConverter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -31,15 +32,23 @@ public class Application {
     @Column(name = "status", nullable = false)
     private Status status;
 
-    @NotNull(message = "Score field is required")
-    @Column(name = "score", precision = 6, scale = 2, nullable = false)
-    private BigDecimal score;
-
     @CreatedDate
     @Column(name = "applied_at", updatable = false)
     private LocalDateTime appliedAt;
 
-    private
+    @Converter(converter = ApplicationDataConverter.class)
+    @Column(name = "application_data", columnDefinition = "json", nullable = false)
+    private ApplicationDataConverter application_data;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "field_of_study_id")
+    private FieldOfStudy fieldOfStudy;
+
+
 
     public enum Status {PENDING, QUALIFIED, WAITING_LIST, REJECTED}
 }
