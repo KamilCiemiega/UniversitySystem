@@ -13,13 +13,13 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "fields_of_study")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class FieldOfStudy {
+//@Entity
+//@Table(name = "fields_of_study")
+//@Getter
+//@Setter
+//@NoArgsConstructor
+//@AllArgsConstructor
+//public class FieldOfStudy {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
