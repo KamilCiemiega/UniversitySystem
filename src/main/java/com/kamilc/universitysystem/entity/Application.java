@@ -1,6 +1,9 @@
 package com.kamilc.universitysystem.entity;
 
 import com.kamilc.universitysystem.domain.converter.ApplicationDataConverter;
+import com.kamilc.universitysystem.domain.converter.ConfirmationStatusConverter;
+import com.kamilc.universitysystem.domain.model.applicationData.ApplicationConfigurator;
+import com.kamilc.universitysystem.domain.model.confirmationStatus.ConfirmationConfigurator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -10,7 +13,6 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -36,9 +38,13 @@ public class Application {
     @Column(name = "applied_at", updatable = false)
     private LocalDateTime appliedAt;
 
-    @Converter(converter = ApplicationDataConverter.class)
+    @Convert(converter = ApplicationDataConverter.class)
     @Column(name = "application_data", columnDefinition = "json", nullable = false)
-    private ApplicationDataConverter application_data;
+    private ApplicationConfigurator applicationData;
+
+    @Convert(converter = ConfirmationStatusConverter.class)
+    @Column(name = "confirmation_status", columnDefinition = "json", nullable = false)
+    private ConfirmationConfigurator confirmationStatus;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

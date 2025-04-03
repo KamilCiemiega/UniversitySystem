@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(loginUserDTO.getEmail())
                 .orElseThrow(() -> new EntityNotFoundException("User with email " + loginUserDTO.getEmail() + " not found"));
 
-        if (!passwordEncoder.matches(user.getPassword(), loginUserDTO.getPassword())) {
+        if (!passwordEncoder.matches(loginUserDTO.getPassword(), user.getPassword())) {
             throw new BadCredentialsException("Invalid email or password");
         }
 

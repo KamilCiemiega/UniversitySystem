@@ -1,7 +1,8 @@
 package com.kamilc.universitysystem.entity;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kamilc.universitysystem.domain.converter.ScoringConverter;
+import com.kamilc.universitysystem.domain.model.scoringConfig.ScoringConfiguration;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,13 +14,13 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Entity
-//@Table(name = "fields_of_study")
-//@Getter
-//@Setter
-//@NoArgsConstructor
-//@AllArgsConstructor
-//public class FieldOfStudy {
+@Entity
+@Table(name = "fields_of_study")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class FieldOfStudy {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,10 +36,6 @@ import java.util.List;
     @Column(name = "study_type", nullable = false)
     private FieldOfStudy.StudyType studyType;
 
-    @NotNull(message = "Available slots can't be null")
-    @Column(name = "available_slots", nullable = false)
-    private Integer availableSlots;
-
     @JsonIgnore
     @OneToMany(mappedBy = "fieldOfStudy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EducationScope> educationScopes = new ArrayList<>();
@@ -46,6 +43,10 @@ import java.util.List;
     @JsonIgnore
     @OneToMany(mappedBy = "fieldOfStudy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Semester> semesters = new ArrayList<>();
+
+    @Convert(converter = ScoringConverter.class)
+    @Column(name = "scoring_config", columnDefinition = "json", nullable = false)
+    private ScoringConfiguration scoringConfig;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "fieldsOfStudy")
