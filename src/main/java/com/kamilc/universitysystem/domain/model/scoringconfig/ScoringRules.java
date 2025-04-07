@@ -1,4 +1,4 @@
-package com.kamilc.universitysystem.domain.model.scoringConfig;
+package com.kamilc.universitysystem.domain.model.scoringconfig;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

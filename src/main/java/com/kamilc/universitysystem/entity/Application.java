@@ -2,8 +2,8 @@ package com.kamilc.universitysystem.entity;
 
 import com.kamilc.universitysystem.domain.converter.ApplicationDataConverter;
 import com.kamilc.universitysystem.domain.converter.ConfirmationStatusConverter;
-import com.kamilc.universitysystem.domain.model.applicationData.ApplicationConfigurator;
-import com.kamilc.universitysystem.domain.model.confirmationStatus.ConfirmationConfigurator;
+import com.kamilc.universitysystem.domain.model.applicationdata.ApplicationConfigurator;
+import com.kamilc.universitysystem.domain.model.confirmationstatus.ConfirmationConfigurator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -13,6 +13,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -46,6 +47,9 @@ public class Application {
     @Column(name = "confirmation_status", columnDefinition = "json", nullable = false)
     private ConfirmationConfigurator confirmationStatus;
 
+    @Column(name = "score", precision = 6, scale = 2)
+    private BigDecimal score;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -53,8 +57,6 @@ public class Application {
     @ManyToOne
     @JoinColumn(name = "field_of_study_id")
     private FieldOfStudy fieldOfStudy;
-
-
 
     public enum Status {PENDING, QUALIFIED, WAITING_LIST, REJECTED}
 }

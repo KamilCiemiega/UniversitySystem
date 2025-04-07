@@ -2,7 +2,7 @@ package com.kamilc.universitysystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kamilc.universitysystem.domain.converter.ScoringConverter;
-import com.kamilc.universitysystem.domain.model.scoringConfig.ScoringConfiguration;
+import com.kamilc.universitysystem.domain.model.scoringconfig.ScoringConfiguration;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,4 +1,4 @@
-package com.kamilc.universitysystem.domain.model.applicationData;
+package com.kamilc.universitysystem.domain.model.applicationdata;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

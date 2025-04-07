@@ -1,4 +1,4 @@
-package com.kamilc.universitysystem.web.dto.userDtoS;
+package com.kamilc.universitysystem.web.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.kamilc.universitysystem.domain.model.confirmationStatus;
+package com.kamilc.universitysystem.domain.model.confirmationstatus;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

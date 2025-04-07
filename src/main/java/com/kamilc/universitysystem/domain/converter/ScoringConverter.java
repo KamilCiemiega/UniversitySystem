@@ -1,6 +1,6 @@
 package com.kamilc.universitysystem.domain.converter;
 
-import com.kamilc.universitysystem.domain.model.scoringConfig.ScoringConfiguration;
+import com.kamilc.universitysystem.domain.model.scoringconfig.ScoringConfiguration;
 import jakarta.persistence.Converter;
 
 

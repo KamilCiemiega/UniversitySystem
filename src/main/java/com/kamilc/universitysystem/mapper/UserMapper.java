@@ -1,8 +1,8 @@
 package com.kamilc.universitysystem.mapper;
 
-import com.kamilc.universitysystem.web.dto.userDtoS.NewUserDTO;
+import com.kamilc.universitysystem.web.dto.userdtos.NewUserDTO;
 import com.kamilc.universitysystem.entity.User;
-import com.kamilc.universitysystem.web.dto.userDtoS.UserResponseDTO;
+import com.kamilc.universitysystem.web.dto.userdtos.UserResponseDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

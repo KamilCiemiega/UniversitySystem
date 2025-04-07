@@ -1,6 +1,6 @@
 package com.kamilc.universitysystem.domain.converter;
 
-import com.kamilc.universitysystem.domain.model.applicationData.ApplicationConfigurator;
+import com.kamilc.universitysystem.domain.model.applicationdata.ApplicationConfigurator;
 import jakarta.persistence.Converter;
 
 @Converter

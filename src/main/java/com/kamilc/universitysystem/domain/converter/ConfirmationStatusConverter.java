@@ -1,6 +1,6 @@
 package com.kamilc.universitysystem.domain.converter;
 
-import com.kamilc.universitysystem.domain.model.confirmationStatus.ConfirmationConfigurator;
+import com.kamilc.universitysystem.domain.model.confirmationstatus.ConfirmationConfigurator;
 import jakarta.persistence.Converter;
 
 @Converter

@@ -1,8 +1,8 @@
 package com.kamilc.universitysystem.web.controller;
-import com.kamilc.universitysystem.web.dto.userDtoS.LoginUserDTO;
-import com.kamilc.universitysystem.web.dto.userDtoS.NewUserDTO;
+import com.kamilc.universitysystem.web.dto.LoginUserDTO;
+import com.kamilc.universitysystem.web.dto.userdtos.NewUserDTO;
 import com.kamilc.universitysystem.domain.service.UserService;
-import com.kamilc.universitysystem.web.dto.userDtoS.UserResponseDTO;
+import com.kamilc.universitysystem.web.dto.userdtos.UserResponseDTO;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,5 +1,6 @@
 package com.kamilc.universitysystem.exception;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,6 @@ public class GlobalExceptionHandler {
             if (constraintName != null) {
                 Map<String, String> constraintMessages = Map.of(
                         "users.unique_users_email", "Email is already taken",
-                        "tokens.unique_tokens_token", "Token is already taken",
                         "unique_fields_of_study_name", "Field of study with this name already exists",
                         "subjects.unique_subjects_name_UNIQUE", "Subject name already exist",
                         "unique_students_group_name", "Student group with that name already exists",
@@ -49,6 +49,13 @@ public class GlobalExceptionHandler {
             errors.put(error.getField(), error.getDefaultMessage());
         }
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleEntityNotFound(EntityNotFoundException ex) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
 }

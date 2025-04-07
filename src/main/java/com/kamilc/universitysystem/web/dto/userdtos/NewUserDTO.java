@@ -1,15 +1,15 @@
-package com.kamilc.universitysystem.web.dto.userDtoS;
+package com.kamilc.universitysystem.web.dto.userdtos;
 
-import com.kamilc.universitysystem.web.dto.FieldOfStudyDTO;
-import com.kamilc.universitysystem.entity.User;
+import com.kamilc.universitysystem.web.dto.BasicUserDTO;
+import com.kamilc.universitysystem.web.dto.applicationdtos.ApplicationDTO;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -27,6 +27,6 @@ public class NewUserDTO extends BasicUserDTO {
     @NotBlank(message = "User role is required")
     private String role;
 
-    private List<FieldOfStudyDTO> fieldOfStudyDTOs = new ArrayList<>();
-    private Integer groupId;
+    @NotNull(message = "Application data is required")
+    private List<ApplicationDTO> application;
 }

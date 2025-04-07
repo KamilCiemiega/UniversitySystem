@@ -1,4 +1,4 @@
-package com.kamilc.universitysystem.domain.model.confirmationStatus;
+package com.kamilc.universitysystem.domain.model.confirmationstatus;
 
 import lombok.Getter;
 import lombok.Setter;

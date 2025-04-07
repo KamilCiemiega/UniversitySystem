@@ -56,11 +56,9 @@ public class User {
     @Column(name = "role", nullable = false)
     private UserRole role;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Student> students = new ArrayList<>();
 
-    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Lecturer> lecturers = new ArrayList<>();
 
@@ -70,10 +68,8 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "field_of_study_id")
     )
-    @JsonIgnore
     private List<FieldOfStudy> fieldsOfStudy = new ArrayList<>();
 
-    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Application> applications = new ArrayList<>();
 

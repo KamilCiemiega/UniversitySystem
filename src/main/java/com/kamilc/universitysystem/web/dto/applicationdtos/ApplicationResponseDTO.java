@@ -1,4 +1,4 @@
-package com.kamilc.universitysystem.web.dto.userDtoS;
+package com.kamilc.universitysystem.web.dto.applicationdtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,10 +11,8 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO extends BasicUserDTO {
+public class ApplicationResponseDTO {
     private Integer id;
-    private String email;
-    private String password;
-    private LocalDateTime createdAt;
-    private String role;
+    private String Status;
+    private LocalDateTime appliedAt;
 }

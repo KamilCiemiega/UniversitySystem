@@ -1,4 +1,4 @@
-package com.kamilc.universitysystem.domain.model.applicationData;
+package com.kamilc.universitysystem.domain.model.applicationdata;
 
 import lombok.Getter;
 import lombok.Setter;

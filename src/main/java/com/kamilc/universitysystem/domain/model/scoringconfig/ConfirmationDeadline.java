@@ -1,4 +1,4 @@
-package com.kamilc.universitysystem.domain.model.scoringConfig;
+package com.kamilc.universitysystem.domain.model.scoringconfig;
 
 import lombok.Getter;
 import lombok.Setter;
