@@ -9,7 +9,6 @@ import java.util.List;
 @Getter
 @Setter
 public class ApplicationConfigurator {
-
     @JsonProperty("student_results")
     private List<StudentResult> studentResults;
 }

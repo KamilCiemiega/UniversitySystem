@@ -39,9 +39,9 @@ public class Application {
     @Column(name = "applied_at", updatable = false)
     private LocalDateTime appliedAt;
 
-//    @Convert(converter = ApplicationDataConverter.class)
-//    @Column(name = "application_data", columnDefinition = "json", nullable = false)
-//    private ApplicationConfigurator applicationData;
+    @Convert(converter = ApplicationDataConverter.class)
+    @Column(name = "application_data", columnDefinition = "json", nullable = false)
+    private ApplicationConfigurator applicationData;
 
     @Convert(converter = ConfirmationStatusConverter.class)
     @Column(name = "confirmation_status", columnDefinition = "json", nullable = false)
@@ -53,10 +53,6 @@ public class Application {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "field_of_study_id")
-    private FieldOfStudy fieldOfStudy;
 
     public enum Status {PENDING, QUALIFIED, WAITING_LIST, REJECTED}
 }

@@ -5,7 +5,6 @@ import com.kamilc.universitysystem.domain.service.RecruitmentScoringService;
 import com.kamilc.universitysystem.entity.Application;
 import com.kamilc.universitysystem.entity.FieldOfStudy;
 import com.kamilc.universitysystem.web.dto.LoginUserDTO;
-import com.kamilc.universitysystem.web.dto.applicationdtos.ApplicationResponseDTO;
 import com.kamilc.universitysystem.web.dto.userdtos.NewUserDTO;
 import com.kamilc.universitysystem.domain.dao.UserRepository;
 import com.kamilc.universitysystem.entity.User;
@@ -14,8 +13,6 @@ import com.kamilc.universitysystem.domain.service.UserService;
 import com.kamilc.universitysystem.web.dto.userdtos.UserResponseDTO;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,7 +50,7 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toEntity(newUserDTO);
         user.setPassword(passwordEncoder.encode(newUserDTO.getPassword()));
 
-       List<Application> applicationList = newUserDTO.getApplication().stream()
+       List<Application> applicationList = newUserDTO.getApplicationData().stream()
                 .map(appDto -> {
                     FieldOfStudy field = fieldOfStudyRepository.findById(appDto.getFieldOfStudyId())
                             .orElseThrow(() -> new EntityNotFoundException("Field of study not found for ID: " + appDto.getFieldOfStudyId()));

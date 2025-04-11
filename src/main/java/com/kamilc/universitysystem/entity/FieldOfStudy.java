@@ -36,11 +36,9 @@ public class FieldOfStudy {
     @Column(name = "study_type", nullable = false)
     private FieldOfStudy.StudyType studyType;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "fieldOfStudy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EducationScope> educationScopes = new ArrayList<>();
 
-    @JsonIgnore
     @OneToMany(mappedBy = "fieldOfStudy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Semester> semesters = new ArrayList<>();
 
@@ -48,17 +46,8 @@ public class FieldOfStudy {
     @Column(name = "scoring_config", columnDefinition = "json", nullable = false)
     private ScoringConfiguration scoringConfig;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "fieldsOfStudy")
     private List<User> users = new ArrayList<>();
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "fieldOfStudy", cascade = {
-            CascadeType.MERGE,
-            CascadeType.PERSIST,
-            CascadeType.REFRESH
-    }, orphanRemoval = true)
-    private List<Application> applications = new ArrayList<>();
 
     public enum StudyType {
         FULL_TIME, PART_TIME

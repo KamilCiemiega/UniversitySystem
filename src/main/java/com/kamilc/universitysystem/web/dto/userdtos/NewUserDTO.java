@@ -1,15 +1,18 @@
 package com.kamilc.universitysystem.web.dto.userdtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.kamilc.universitysystem.domain.model.applicationdata.ApplicationConfigurator;
 import com.kamilc.universitysystem.web.dto.BasicUserDTO;
-import com.kamilc.universitysystem.web.dto.applicationdtos.ApplicationDTO;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -27,6 +30,10 @@ public class NewUserDTO extends BasicUserDTO {
     @NotBlank(message = "User role is required")
     private String role;
 
-    @NotNull(message = "Application data is required")
-    private List<ApplicationDTO> application;
+    @Valid
+    @NotEmpty(message = "Application data can't be empty")
+    @JsonProperty("application_data")
+    private List<ApplicationConfigurator> applicationData = new ArrayList<>();
+
+
 }
