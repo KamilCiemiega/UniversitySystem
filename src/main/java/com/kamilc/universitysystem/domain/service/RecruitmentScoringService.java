@@ -8,5 +8,5 @@ import java.util.List;
 
 
 public interface RecruitmentScoringService {
-    Application calculateScore( ApplicationConfigurator app, FieldOfStudy fieldOfStudy);
+   List <Application> calculateScore( ApplicationConfigurator app, List<FieldOfStudy> fieldsOfStudy);
 }

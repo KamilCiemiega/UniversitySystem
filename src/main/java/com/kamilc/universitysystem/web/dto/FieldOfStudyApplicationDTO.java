@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.UniqueElements;
         entity = FieldOfStudy.class,
         fieldName = "name",
         valueField = "name",
-        message = "Email address isn't unique"
+        message = "Name field isn't unique"
 )
 @Getter
 @Setter

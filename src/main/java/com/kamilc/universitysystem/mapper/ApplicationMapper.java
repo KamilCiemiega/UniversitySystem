@@ -1,6 +1,7 @@
 package com.kamilc.universitysystem.mapper;
 
 import com.kamilc.universitysystem.entity.Application;
+import com.kamilc.universitysystem.web.dto.applicationdtos.ApplicationResponseDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -8,5 +9,5 @@ import org.mapstruct.Mapping;
 public interface ApplicationMapper {
     @Mapping(target = "id", source = "id")
     @Mapping(target = "status", source = "status", qualifiedByName = "enumToString")
-    Application toApplicationResponseDTO(Application app);
+    ApplicationResponseDTO toApplicationResponseDTO(Application app);
 }

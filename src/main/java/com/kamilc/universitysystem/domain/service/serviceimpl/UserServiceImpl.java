@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
@@ -29,7 +30,6 @@ public class UserServiceImpl implements UserService {
     private final FieldOfStudyRepository fieldOfStudyRepository;
     private final PasswordEncoder passwordEncoder;
     private final RecruitmentScoringService recruitmentScoringService;
-
 
     @Autowired
     public UserServiceImpl(UserMapper userMapper,
@@ -50,17 +50,24 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toEntity(newUserDTO);
         user.setPassword(passwordEncoder.encode(newUserDTO.getPassword()));
 
-       List<Application> applicationList = newUserDTO.getApplicationData().stream()
-                .map(appDto -> {
-                    FieldOfStudy field = fieldOfStudyRepository.findById(appDto.getFieldOfStudyId())
-                            .orElseThrow(() -> new EntityNotFoundException("Field of study not found for ID: " + appDto.getFieldOfStudyId()));
+        List <FieldOfStudy> fieldsOfStudy = newUserDTO.getFieldOfStudyIDs()
+                .stream()
+                        .map(studyId -> {
+                           FieldOfStudy exFoS = fieldOfStudyRepository.findById(studyId)
+                                    .orElseThrow(() -> new EntityNotFoundException("Can't find field of study entity with ID: " + studyId));
 
-                    return recruitmentScoringService.calculateScore(appDto.getApplicationData(), field);
-                })
-                .toList();
+                           user.getFieldsOfStudy().add(exFoS);
 
-       user.setApplications(applicationList);
+                           return exFoS;
+                        })
+                        .toList();
+
+       List <Application> applications = recruitmentScoringService
+               .calculateScore(newUserDTO.getApplicationData(), fieldsOfStudy);
+
        User savedUser = userRepository.save(user);
+       applications.forEach(app -> app.setUser(savedUser));
+       savedUser.getApplications().addAll(applications);
 
        return userMapper.toUserResponseDTO(savedUser);
     }

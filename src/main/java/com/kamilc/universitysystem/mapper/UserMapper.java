@@ -12,7 +12,6 @@ public interface UserMapper {
     @Mapping(target = "role", source = "role", qualifiedByName = "stringToEnum")
     User toEntity(NewUserDTO newUserDTO);
 
-    @Mapping(target = "id", source = "id")
     UserResponseDTO toUserResponseDTO(User user);
 
     @Mapping(target = "role", source = "role", qualifiedByName = "enumToString")

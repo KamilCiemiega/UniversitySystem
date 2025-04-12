@@ -13,6 +13,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ApplicationResponseDTO {
     private Integer id;
-    private String Status;
+    private String status;
     private LocalDateTime appliedAt;
 }
