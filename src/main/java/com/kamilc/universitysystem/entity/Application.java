@@ -1,9 +1,7 @@
 package com.kamilc.universitysystem.entity;
 
 import com.kamilc.universitysystem.domain.converter.ApplicationDataConverter;
-import com.kamilc.universitysystem.domain.converter.ConfirmationStatusConverter;
 import com.kamilc.universitysystem.domain.model.applicationdata.ApplicationConfigurator;
-import com.kamilc.universitysystem.domain.model.confirmationstatus.ConfirmationConfigurator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -43,12 +41,17 @@ public class Application {
     @Column(name = "application_data", columnDefinition = "json", nullable = false)
     private ApplicationConfigurator applicationData;
 
-    @Convert(converter = ConfirmationStatusConverter.class)
-    @Column(name = "confirmation_status", columnDefinition = "json", nullable = false)
-    private ConfirmationConfigurator confirmationStatus;
-
     @Column(name = "score", precision = 6, scale = 2)
     private BigDecimal score;
+
+    @Column(name = "confirmation_stage")
+    private String confirmationStage;
+
+    @Column(name = "confirmation_status")
+    private Boolean confirmationStatus;
+
+    @Column(name = "confirmed_at")
+    private LocalDateTime confirmedAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

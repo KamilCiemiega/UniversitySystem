@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
                 .stream()
                         .map(studyId -> {
                            FieldOfStudy exFoS = fieldOfStudyRepository.findById(studyId)
-                                    .orElseThrow(() -> new EntityNotFoundException("Can't find field of study entity with ID: " + studyId));
+                                    .orElseThrow(() -> new EntityNotFoundException("Can't find field of study with ID: " + studyId));
 
                            user.getFieldsOfStudy().add(exFoS);
 
