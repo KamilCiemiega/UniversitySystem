@@ -11,7 +11,7 @@ import java.util.Map;
 @Setter
 public class ScoringRules {
 
-    @JsonProperty("level_multipliers")
+//    @JsonProperty("level_multipliers")
     @NotEmpty(message = "Level multipliers cannot be empty")
     private Map<String, Double> levelMultipliers;
 }
