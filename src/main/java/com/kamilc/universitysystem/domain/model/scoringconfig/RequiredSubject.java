@@ -16,4 +16,7 @@ public class RequiredSubject {
 
     @NotNull(message = "Field 'required' must be specified")
     private boolean required;
+
+    @NotBlank(message = "Subject level is required")
+    private String level;
 }
