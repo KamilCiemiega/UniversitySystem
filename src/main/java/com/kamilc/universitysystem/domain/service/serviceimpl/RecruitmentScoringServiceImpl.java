@@ -62,7 +62,7 @@ public class RecruitmentScoringServiceImpl implements RecruitmentScoringService 
                     Set<String> applicantLevels = subjectLevels.getOrDefault(requiredName, Set.of());
 
                     if (!applicantLevels.contains(requiredLevel)) {
-                        missingSubjectsForStudies
+//                        missingSubjectsForStudies
                                 .computeIfAbsent(fS.getName(), k -> new ArrayList<>())
                                 .add(new MissingSubjectInfoDTO(requiredName, requiredLevel));
                     }
