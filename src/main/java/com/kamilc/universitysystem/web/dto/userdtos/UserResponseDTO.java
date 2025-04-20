@@ -1,6 +1,6 @@
 package com.kamilc.universitysystem.web.dto.userdtos;
 
-import com.kamilc.universitysystem.web.dto.applicationdtos.ApplicationResponseDTO;
+import com.kamilc.universitysystem.web.dto.ScoringResultDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,5 +16,5 @@ import java.util.List;
 public class UserResponseDTO {
     private Integer id;
     private LocalDateTime createdAt;
-    private List <ApplicationResponseDTO> applications;
+    private List <ScoringResultDTO> scoringResults;
 }

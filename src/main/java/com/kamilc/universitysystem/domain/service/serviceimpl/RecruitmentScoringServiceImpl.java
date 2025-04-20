@@ -4,72 +4,110 @@ import com.kamilc.universitysystem.domain.dao.ApplicationRepository;
 import com.kamilc.universitysystem.domain.model.applicationdata.ApplicationConfigurator;
 import com.kamilc.universitysystem.domain.model.scoringconfig.RequiredSubject;
 import com.kamilc.universitysystem.domain.service.RecruitmentScoringService;
+import com.kamilc.universitysystem.domain.service.helper.ScoreCalculator;
 import com.kamilc.universitysystem.entity.Application;
 import com.kamilc.universitysystem.entity.FieldOfStudy;
+import com.kamilc.universitysystem.mapper.ApplicationMapper;
 import com.kamilc.universitysystem.web.dto.MissingSubjectInfoDTO;
+import com.kamilc.universitysystem.web.dto.ScoringResultDTO;
+import com.kamilc.universitysystem.web.dto.applicationdtos.ApplicationResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class RecruitmentScoringServiceImpl implements RecruitmentScoringService {
 
     private final ApplicationRepository applicationRepository;
+    private final ApplicationMapper applicationMapper;
+    private final ScoreCalculator scoreCalculator;
 
     @Autowired
-    public RecruitmentScoringServiceImpl(ApplicationRepository applicationRepository) {
+    public RecruitmentScoringServiceImpl(ApplicationRepository applicationRepository, ApplicationMapper applicationMapper, ScoreCalculator scoreCalculator) {
         this.applicationRepository = applicationRepository;
+        this.applicationMapper = applicationMapper;
+        this.scoreCalculator = scoreCalculator;
     }
 
 
     @Override
     @Transactional
-    public List<Application> calculateScore(ApplicationConfigurator app, List<FieldOfStudy> studies) {
-        Map<String, List<MissingSubjectInfoDTO>> reqSubjects = verifyRequiredSubjects(app, studies);
+    public ScoringResultDTO calculateScore(ApplicationConfigurator app, List<FieldOfStudy> studies) {
+        Map<String, List<MissingSubjectInfoDTO>> missingReqSubjects = verifyRequiredSubjects(app, studies);
+        log.info("Field of study reqSubjects: {}", missingReqSubjects);
 
-         if(!reqSubjects.isEmpty()){
-             throw new IllegalArgumentException("Missing required subjects: " + reqSubjects);
-         }
+        Set<String> missingStudyNames = missingReqSubjects.keySet();
 
-        Application application = new Application();
-        application.setStatus(Application.Status.PENDING);
+        List<FieldOfStudy> validStudies = studies.stream()
+                .filter(fos -> !missingStudyNames.contains(fos.getName()))
+                .toList();
 
-        Application savedApp = applicationRepository.save(application);
+        if (validStudies.isEmpty()) {
+            throw new IllegalArgumentException("None of the selected fields of study meet the requirements. Missing subjects: " + missingReqSubjects);
+        }
 
-        return List.of(savedApp);
+        ScoringResultDTO scoringResultDTO = new ScoringResultDTO();
+
+        List<ApplicationResponseDTO> savedApplicationsDTOs = generateApplicationsFromValidStudies(validStudies, app);
+
+        scoringResultDTO.setApplicationResponseDTOs(savedApplicationsDTOs);
+
+        if (!missingReqSubjects.isEmpty()) {
+            log.warn("Some fields of study were skipped due to missing required subjects: {}", missingReqSubjects);
+            scoringResultDTO.setRejectedApplications(missingReqSubjects);
+        }
+
+        return scoringResultDTO;
     }
 
     public Map<String, List<MissingSubjectInfoDTO>> verifyRequiredSubjects(ApplicationConfigurator app, List<FieldOfStudy> studies) {
-        Map<String, List<MissingSubjectInfoDTO>> missingSubjectsForStudies = new HashMap<>();
-
+        //English: [basic, extended]
         Map<String, Set<String>> subjectLevels = new HashMap<>();
         app.getStudentResults()
                 .forEach(studentResult ->
                         subjectLevels
                                 .computeIfAbsent(studentResult.getSubject(), k -> new HashSet<>())
                                 .add(studentResult.getLevel()));
+        log.info("student config: {}", subjectLevels);
 
-        for (FieldOfStudy fS : studies) {
-            for (RequiredSubject subject : fS.getScoringConfig().getFieldConfig().getRequiredSubjects()) {
-                if (subject.isRequired()) {
-                    String requiredName = subject.getName();
-                    String requiredLevel = subject.getLevel();
-
-                    Set<String> applicantLevels = subjectLevels.getOrDefault(requiredName, Set.of());
-
-                    if (!applicantLevels.contains(requiredLevel)) {
-//                        missingSubjectsForStudies
-                                .computeIfAbsent(fS.getName(), k -> new ArrayList<>())
-                                .add(new MissingSubjectInfoDTO(requiredName, requiredLevel));
-                    }
-                }
-            }
-        }
-
-        return missingSubjectsForStudies;
+        return studies.stream()
+                .flatMap(fos -> fos.getScoringConfig().getFieldConfig().getRequiredSubjects().stream()
+                        .filter(RequiredSubject::isRequired)
+                        .filter(subj -> {
+                            String name = subj.getName();
+                            String level = subj.getLevel();
+                            Set<String> applicantLevels = subjectLevels.getOrDefault(name, Set.of());
+                            return !applicantLevels.contains(level);
+                        })
+                        .map(subj -> Map.entry(fos.getName(), new MissingSubjectInfoDTO(subj.getName(), subj.getLevel())))
+                )
+                .collect(Collectors.groupingBy(
+                        Map.Entry::getKey,
+                        Collectors.mapping(Map.Entry::getValue, Collectors.toList())
+                ));
     }
+
+    public List<ApplicationResponseDTO> generateApplicationsFromValidStudies(List<FieldOfStudy> validStudies, ApplicationConfigurator app) {
+        return validStudies.stream()
+                .map(validStudy -> {
+                    BigDecimal score = scoreCalculator.calculateScoreForFieldOfStudy(app, validStudy);
+
+                    Application application = new Application();
+                    application.setScore(score);
+                    application.setStatus(Application.Status.PENDING);
+
+                    ApplicationResponseDTO applicationResponseDTO = applicationMapper.toApplicationResponseDTO(application);
+                    applicationResponseDTO.setFieldOfStudyId(validStudy.getId());
+
+                    return applicationResponseDTO;
+                })
+                .toList();
+    }
+
 }

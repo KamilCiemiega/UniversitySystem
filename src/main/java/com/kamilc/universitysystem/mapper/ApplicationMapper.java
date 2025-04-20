@@ -5,9 +5,11 @@ import com.kamilc.universitysystem.web.dto.applicationdtos.ApplicationResponseDT
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = EnumMapper.class)
+@Mapper(componentModel = "spring")
 public interface ApplicationMapper {
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "status", source = "status", qualifiedByName = "enumToString")
+    @Mapping(target = "id", ignore = true)
     ApplicationResponseDTO toApplicationResponseDTO(Application app);
+
+    @Mapping(target = "id", ignore = true)
+    Application toApplication(ApplicationResponseDTO appDTO);
 }

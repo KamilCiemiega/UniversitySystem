@@ -4,7 +4,9 @@ import com.kamilc.universitysystem.domain.dao.FieldOfStudyRepository;
 import com.kamilc.universitysystem.domain.service.RecruitmentScoringService;
 import com.kamilc.universitysystem.entity.Application;
 import com.kamilc.universitysystem.entity.FieldOfStudy;
+import com.kamilc.universitysystem.mapper.ApplicationMapper;
 import com.kamilc.universitysystem.web.dto.LoginUserDTO;
+import com.kamilc.universitysystem.web.dto.ScoringResultDTO;
 import com.kamilc.universitysystem.web.dto.userdtos.NewUserDTO;
 import com.kamilc.universitysystem.domain.dao.UserRepository;
 import com.kamilc.universitysystem.entity.User;
@@ -26,18 +28,20 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
+    private final ApplicationMapper applicationMapper;
     private final UserRepository userRepository;
     private final FieldOfStudyRepository fieldOfStudyRepository;
     private final PasswordEncoder passwordEncoder;
     private final RecruitmentScoringService recruitmentScoringService;
 
     @Autowired
-    public UserServiceImpl(UserMapper userMapper,
+    public UserServiceImpl(UserMapper userMapper, ApplicationMapper applicationMapper,
                            UserRepository userRepository,
                            FieldOfStudyRepository fieldOfStudyRepository,
                            PasswordEncoder passwordEncoder,
                            RecruitmentScoringService recruitmentScoringService) {
         this.userMapper = userMapper;
+        this.applicationMapper = applicationMapper;
         this.userRepository = userRepository;
         this.fieldOfStudyRepository = fieldOfStudyRepository;
         this.passwordEncoder = passwordEncoder;
@@ -62,12 +66,16 @@ public class UserServiceImpl implements UserService {
                         })
                         .toList();
 
-       List <Application> applications = recruitmentScoringService
+       ScoringResultDTO scoringResultDTO = recruitmentScoringService
                .calculateScore(newUserDTO.getApplicationData(), fieldsOfStudy);
 
-       User savedUser = userRepository.save(user);
-       applications.forEach(app -> app.setUser(savedUser));
-       savedUser.getApplications().addAll(applications);
+        scoringResultDTO.getApplicationResponseDTOs().forEach(appDTO -> {
+            Application app = applicationMapper.toApplication(appDTO);
+            app.setUser(user);
+            user.getApplications().add(app);
+        });
+
+        User savedUser = userRepository.save(user);
 
        return userMapper.toUserResponseDTO(savedUser);
     }

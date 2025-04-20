@@ -16,5 +16,5 @@ public class StudentResult {
     private String level;
 
     @Min(value = 0, message = "Score can't be lover than 0")
-    private int score;
+    private double score;
 }

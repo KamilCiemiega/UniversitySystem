@@ -36,8 +36,8 @@ public class NewUserDTO extends BasicUserDTO {
     @NotBlank(message = "Password is required")
     private String password;
 
-    @NotBlank(message = "User role is required")
-    private String role;
+    @NotNull(message = "User role is required")
+    private User.UserRole role;
 
     @NotNull(message = "Field of study ID can't be null")
     private List<Integer> fieldOfStudyIDs = new ArrayList<>();
