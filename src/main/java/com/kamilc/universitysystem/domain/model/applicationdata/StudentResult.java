@@ -1,10 +1,13 @@
 package com.kamilc.universitysystem.domain.model.applicationdata;
 
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -15,6 +18,6 @@ public class StudentResult {
     @NotNull(message = "Level field can't be empty")
     private String level;
 
-    @Min(value = 0, message = "Score can't be lover than 0")
-    private double score;
+    @DecimalMin(value = "0.00", message = "Score can't be lover than 0")
+    private BigDecimal score;
 }

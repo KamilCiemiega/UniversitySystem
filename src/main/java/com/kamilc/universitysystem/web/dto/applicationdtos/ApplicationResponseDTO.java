@@ -19,4 +19,15 @@ public class ApplicationResponseDTO {
     private BigDecimal score;
     private LocalDateTime appliedAt;
     private Integer fieldOfStudyId;
+
+    @Override
+    public String toString() {
+        return "ApplicationResponseDTO{" +
+                "id=" + id +
+                ", status=" + status +
+                ", score=" + score +
+                ", appliedAt=" + appliedAt +
+                ", fieldOfStudyId=" + fieldOfStudyId +
+                '}';
+    }
 }

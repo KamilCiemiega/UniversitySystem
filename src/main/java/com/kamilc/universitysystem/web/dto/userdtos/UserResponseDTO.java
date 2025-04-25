@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -16,5 +15,5 @@ import java.util.List;
 public class UserResponseDTO {
     private Integer id;
     private LocalDateTime createdAt;
-    private List <ScoringResultDTO> scoringResults;
+    private ScoringResultDTO scoringResult;
 }

@@ -2,6 +2,7 @@ package com.kamilc.universitysystem.domain.service.serviceimpl;
 
 import com.kamilc.universitysystem.domain.dao.FieldOfStudyRepository;
 import com.kamilc.universitysystem.domain.service.RecruitmentScoringService;
+import com.kamilc.universitysystem.domain.service.helper.userServiceHelpers.UserHelper;
 import com.kamilc.universitysystem.entity.Application;
 import com.kamilc.universitysystem.entity.FieldOfStudy;
 import com.kamilc.universitysystem.mapper.ApplicationMapper;
@@ -33,19 +34,21 @@ public class UserServiceImpl implements UserService {
     private final FieldOfStudyRepository fieldOfStudyRepository;
     private final PasswordEncoder passwordEncoder;
     private final RecruitmentScoringService recruitmentScoringService;
+    private final UserHelper userHelper;
 
     @Autowired
     public UserServiceImpl(UserMapper userMapper, ApplicationMapper applicationMapper,
                            UserRepository userRepository,
                            FieldOfStudyRepository fieldOfStudyRepository,
                            PasswordEncoder passwordEncoder,
-                           RecruitmentScoringService recruitmentScoringService) {
+                           RecruitmentScoringService recruitmentScoringService, UserHelper userHelper) {
         this.userMapper = userMapper;
         this.applicationMapper = applicationMapper;
         this.userRepository = userRepository;
         this.fieldOfStudyRepository = fieldOfStudyRepository;
         this.passwordEncoder = passwordEncoder;
         this.recruitmentScoringService = recruitmentScoringService;
+        this.userHelper = userHelper;
     }
 
     @Override
@@ -54,30 +57,22 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toEntity(newUserDTO);
         user.setPassword(passwordEncoder.encode(newUserDTO.getPassword()));
 
-        List <FieldOfStudy> fieldsOfStudy = newUserDTO.getFieldOfStudyIDs()
-                .stream()
-                        .map(studyId -> {
-                           FieldOfStudy exFoS = fieldOfStudyRepository.findById(studyId)
-                                    .orElseThrow(() -> new EntityNotFoundException("Can't find field of study with ID: " + studyId));
-
-                           user.getFieldsOfStudy().add(exFoS);
-
-                           return exFoS;
-                        })
-                        .toList();
-
        ScoringResultDTO scoringResultDTO = recruitmentScoringService
-               .calculateScore(newUserDTO.getApplicationData(), fieldsOfStudy);
+               .calculateScore(newUserDTO.getApplicationData(), userHelper.findFieldOfStudyEntity(newUserDTO.getFieldOfStudyIDs(),user));
 
         scoringResultDTO.getApplicationResponseDTOs().forEach(appDTO -> {
             Application app = applicationMapper.toApplication(appDTO);
             app.setUser(user);
+            app.setApplicationData(newUserDTO.getApplicationData());
             user.getApplications().add(app);
         });
 
         User savedUser = userRepository.save(user);
+        UserResponseDTO userResponseDTO = userMapper.toUserResponseDTO(savedUser);
 
-       return userMapper.toUserResponseDTO(savedUser);
+        userResponseDTO.setScoringResult(scoringResultDTO);
+
+        return userResponseDTO;
     }
 
     @Override

@@ -4,7 +4,7 @@ import com.kamilc.universitysystem.domain.dao.ApplicationRepository;
 import com.kamilc.universitysystem.domain.model.applicationdata.ApplicationConfigurator;
 import com.kamilc.universitysystem.domain.model.scoringconfig.RequiredSubject;
 import com.kamilc.universitysystem.domain.service.RecruitmentScoringService;
-import com.kamilc.universitysystem.domain.service.helper.ScoreCalculator;
+import com.kamilc.universitysystem.domain.service.helper.scoringServiceHelpers.ScoreCalculator;
 import com.kamilc.universitysystem.entity.Application;
 import com.kamilc.universitysystem.entity.FieldOfStudy;
 import com.kamilc.universitysystem.mapper.ApplicationMapper;
@@ -74,6 +74,7 @@ public class RecruitmentScoringServiceImpl implements RecruitmentScoringService 
                         subjectLevels
                                 .computeIfAbsent(studentResult.getSubject(), k -> new HashSet<>())
                                 .add(studentResult.getLevel()));
+
         log.info("student config: {}", subjectLevels);
 
         return studies.stream()
@@ -101,11 +102,9 @@ public class RecruitmentScoringServiceImpl implements RecruitmentScoringService 
                     Application application = new Application();
                     application.setScore(score);
                     application.setStatus(Application.Status.PENDING);
+                    application.setApplicationData(app);
 
-                    ApplicationResponseDTO applicationResponseDTO = applicationMapper.toApplicationResponseDTO(application);
-                    applicationResponseDTO.setFieldOfStudyId(validStudy.getId());
-
-                    return applicationResponseDTO;
+                    return applicationMapper.toApplicationResponseDTO(application);
                 })
                 .toList();
     }

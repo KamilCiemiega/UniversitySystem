@@ -3,6 +3,7 @@ package com.kamilc.universitysystem.entity;
 import com.kamilc.universitysystem.domain.converter.ApplicationDataConverter;
 import com.kamilc.universitysystem.domain.model.applicationdata.ApplicationConfigurator;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +23,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Application {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
@@ -42,6 +42,7 @@ public class Application {
     private ApplicationConfigurator applicationData;
 
     @Column(name = "score", precision = 6, scale = 2)
+    @DecimalMin(value = "0.00", message = "Score can't be lower than 0")
     private BigDecimal score;
 
     @Column(name = "confirmation_stage")
@@ -56,6 +57,11 @@ public class Application {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+    @NotNull(message = "Field of study id cannot be null")
+    @JoinColumn(name = "field_of_study")
+    private FieldOfStudy fieldOfStudy;
 
     public enum Status {PENDING, QUALIFIED, WAITING_LIST, REJECTED}
 }

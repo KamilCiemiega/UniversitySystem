@@ -7,9 +7,8 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface ApplicationMapper {
-    @Mapping(target = "id", ignore = true)
+    @Mapping(source = "fieldOfStudy.id", target = "fieldOfStudyId")
     ApplicationResponseDTO toApplicationResponseDTO(Application app);
 
-    @Mapping(target = "id", ignore = true)
     Application toApplication(ApplicationResponseDTO appDTO);
 }
