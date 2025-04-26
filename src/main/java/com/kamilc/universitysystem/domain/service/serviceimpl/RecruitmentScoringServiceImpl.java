@@ -8,8 +8,8 @@ import com.kamilc.universitysystem.domain.service.helper.scoringServiceHelpers.S
 import com.kamilc.universitysystem.entity.Application;
 import com.kamilc.universitysystem.entity.FieldOfStudy;
 import com.kamilc.universitysystem.mapper.ApplicationMapper;
-import com.kamilc.universitysystem.web.dto.MissingSubjectInfoDTO;
-import com.kamilc.universitysystem.web.dto.ScoringResultDTO;
+import com.kamilc.universitysystem.web.dto.scoringdtos.MissingSubjectInfoDTO;
+import com.kamilc.universitysystem.web.dto.scoringdtos.ScoringResultDTO;
 import com.kamilc.universitysystem.web.dto.applicationdtos.ApplicationResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,12 +99,12 @@ public class RecruitmentScoringServiceImpl implements RecruitmentScoringService 
                 .map(validStudy -> {
                     BigDecimal score = scoreCalculator.calculateScoreForFieldOfStudy(app, validStudy);
 
-                    Application application = new Application();
-                    application.setScore(score);
-                    application.setStatus(Application.Status.PENDING);
-                    application.setApplicationData(app);
+                    ApplicationResponseDTO applicationResponseDTO = new ApplicationResponseDTO();
+                    applicationResponseDTO.setScore(score);
+                    applicationResponseDTO.setStatus(Application.Status.PENDING);
+                    applicationResponseDTO.setFieldOfStudyId(validStudy.getId());
 
-                    return applicationMapper.toApplicationResponseDTO(application);
+                    return  applicationResponseDTO;
                 })
                 .toList();
     }

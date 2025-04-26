@@ -1,6 +1,6 @@
 package com.kamilc.universitysystem.web.dto.userdtos;
 
-import com.kamilc.universitysystem.web.dto.ScoringResultDTO;
+import com.kamilc.universitysystem.web.dto.scoringdtos.ScoringResultDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

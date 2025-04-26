@@ -1,4 +1,4 @@
-package com.kamilc.universitysystem.web.dto;
+package com.kamilc.universitysystem.web.dto.scoringdtos;
 
 
 import com.kamilc.universitysystem.web.dto.applicationdtos.ApplicationResponseDTO;

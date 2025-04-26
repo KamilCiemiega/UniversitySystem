@@ -1,13 +1,13 @@
 package com.kamilc.universitysystem.domain.service.serviceimpl;
 
 import com.kamilc.universitysystem.domain.dao.FieldOfStudyRepository;
+import com.kamilc.universitysystem.domain.service.ApplicationService;
 import com.kamilc.universitysystem.domain.service.RecruitmentScoringService;
 import com.kamilc.universitysystem.domain.service.helper.userServiceHelpers.UserHelper;
 import com.kamilc.universitysystem.entity.Application;
-import com.kamilc.universitysystem.entity.FieldOfStudy;
 import com.kamilc.universitysystem.mapper.ApplicationMapper;
 import com.kamilc.universitysystem.web.dto.LoginUserDTO;
-import com.kamilc.universitysystem.web.dto.ScoringResultDTO;
+import com.kamilc.universitysystem.web.dto.scoringdtos.ScoringResultDTO;
 import com.kamilc.universitysystem.web.dto.userdtos.NewUserDTO;
 import com.kamilc.universitysystem.domain.dao.UserRepository;
 import com.kamilc.universitysystem.entity.User;
@@ -22,8 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 
 @Slf4j
 @Service
@@ -35,13 +33,14 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RecruitmentScoringService recruitmentScoringService;
     private final UserHelper userHelper;
+    private final ApplicationService applicationService;
 
     @Autowired
     public UserServiceImpl(UserMapper userMapper, ApplicationMapper applicationMapper,
                            UserRepository userRepository,
                            FieldOfStudyRepository fieldOfStudyRepository,
                            PasswordEncoder passwordEncoder,
-                           RecruitmentScoringService recruitmentScoringService, UserHelper userHelper) {
+                           RecruitmentScoringService recruitmentScoringService, UserHelper userHelper, ApplicationService applicationService) {
         this.userMapper = userMapper;
         this.applicationMapper = applicationMapper;
         this.userRepository = userRepository;
@@ -49,6 +48,7 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
         this.recruitmentScoringService = recruitmentScoringService;
         this.userHelper = userHelper;
+        this.applicationService = applicationService;
     }
 
     @Override
@@ -58,16 +58,17 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(newUserDTO.getPassword()));
 
        ScoringResultDTO scoringResultDTO = recruitmentScoringService
-               .calculateScore(newUserDTO.getApplicationData(), userHelper.findFieldOfStudyEntity(newUserDTO.getFieldOfStudyIDs(),user));
-
-        scoringResultDTO.getApplicationResponseDTOs().forEach(appDTO -> {
-            Application app = applicationMapper.toApplication(appDTO);
-            app.setUser(user);
-            app.setApplicationData(newUserDTO.getApplicationData());
-            user.getApplications().add(app);
-        });
+               .calculateScore(newUserDTO.getApplicationData(),
+                       userHelper.findFieldOfStudyEntity(newUserDTO.getFieldOfStudyIDs(),user)
+               );
 
         User savedUser = userRepository.save(user);
+
+        scoringResultDTO.getApplicationResponseDTOs().forEach(appDTO -> {
+           Application app = applicationService.save(newUserDTO.getApplicationData(), appDTO, savedUser);
+           savedUser.getApplications().add(app);
+       });
+
         UserResponseDTO userResponseDTO = userMapper.toUserResponseDTO(savedUser);
 
         userResponseDTO.setScoringResult(scoringResultDTO);

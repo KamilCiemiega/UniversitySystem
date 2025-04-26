@@ -60,7 +60,7 @@ public class Application {
 
     @ManyToOne
     @NotNull(message = "Field of study id cannot be null")
-    @JoinColumn(name = "field_of_study")
+    @JoinColumn(name = "field_of_study_id")
     private FieldOfStudy fieldOfStudy;
 
     public enum Status {PENDING, QUALIFIED, WAITING_LIST, REJECTED}

@@ -1,4 +1,4 @@
-package com.kamilc.universitysystem.web.dto;
+package com.kamilc.universitysystem.web.dto.scoringdtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
