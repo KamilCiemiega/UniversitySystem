@@ -1,13 +1,12 @@
 package com.kamilc.universitysystem.domain.service.serviceimpl;
 
-import com.kamilc.universitysystem.domain.dao.FieldOfStudyRepository;
-import com.kamilc.universitysystem.domain.service.ApplicationService;
+import com.kamilc.universitysystem.domain.service.FieldOfStudyService;
 import com.kamilc.universitysystem.domain.service.RecruitmentScoringService;
-import com.kamilc.universitysystem.domain.service.helper.userServiceHelpers.UserHelper;
+import com.kamilc.universitysystem.domain.service.helper.UserHelper;
 import com.kamilc.universitysystem.entity.Application;
-import com.kamilc.universitysystem.mapper.ApplicationMapper;
 import com.kamilc.universitysystem.web.dto.LoginUserDTO;
-import com.kamilc.universitysystem.web.dto.scoringdtos.ScoringResultDTO;
+import com.kamilc.universitysystem.web.dto.scoringdtos.ScoringResultExtendedDTO;
+import com.kamilc.universitysystem.web.dto.scoringdtos.ScoringResultResponseDTO;
 import com.kamilc.universitysystem.web.dto.userdtos.NewUserDTO;
 import com.kamilc.universitysystem.domain.dao.UserRepository;
 import com.kamilc.universitysystem.entity.User;
@@ -22,33 +21,38 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 
 @Slf4j
 @Service
 public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
-    private final ApplicationMapper applicationMapper;
     private final UserRepository userRepository;
-    private final FieldOfStudyRepository fieldOfStudyRepository;
     private final PasswordEncoder passwordEncoder;
     private final RecruitmentScoringService recruitmentScoringService;
     private final UserHelper userHelper;
-    private final ApplicationService applicationService;
+    private final FieldOfStudyService fieldOfStudyService;
 
     @Autowired
-    public UserServiceImpl(UserMapper userMapper, ApplicationMapper applicationMapper,
+    public UserServiceImpl(UserMapper userMapper,
                            UserRepository userRepository,
-                           FieldOfStudyRepository fieldOfStudyRepository,
                            PasswordEncoder passwordEncoder,
-                           RecruitmentScoringService recruitmentScoringService, UserHelper userHelper, ApplicationService applicationService) {
+                           RecruitmentScoringService recruitmentScoringService,
+                           UserHelper userHelper,
+                           FieldOfStudyService fieldOfStudyService
+    ){
         this.userMapper = userMapper;
-        this.applicationMapper = applicationMapper;
         this.userRepository = userRepository;
-        this.fieldOfStudyRepository = fieldOfStudyRepository;
         this.passwordEncoder = passwordEncoder;
         this.recruitmentScoringService = recruitmentScoringService;
         this.userHelper = userHelper;
-        this.applicationService = applicationService;
+        this.fieldOfStudyService = fieldOfStudyService;
+    }
+
+    @Override
+    public void saveUserWithApplications(User user) {
+
     }
 
     @Override
@@ -57,23 +61,30 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toEntity(newUserDTO);
         user.setPassword(passwordEncoder.encode(newUserDTO.getPassword()));
 
-       ScoringResultDTO scoringResultDTO = recruitmentScoringService
+       ScoringResultExtendedDTO extendedScoringResultDTO = recruitmentScoringService
                .calculateScore(newUserDTO.getApplicationData(),
-                       userHelper.findFieldOfStudyEntity(newUserDTO.getFieldOfStudyIDs(),user)
+                       fieldOfStudyService.findFieldOfStudy(newUserDTO.getFieldOfStudyIDs(),user)
                );
 
-        User savedUser = userRepository.save(user);
+        User managedUser = userRepository.save(user);
 
-        scoringResultDTO.getApplicationResponseDTOs().forEach(appDTO -> {
-           Application app = applicationService.save(newUserDTO.getApplicationData(), appDTO, savedUser);
-           savedUser.getApplications().add(app);
-       });
+        List<Application> applicationList = userHelper.generateApplicationsForUser(
+                extendedScoringResultDTO.getApplicationDraftDTOs(),
+                newUserDTO,
+                managedUser
+        );
 
-        UserResponseDTO userResponseDTO = userMapper.toUserResponseDTO(savedUser);
+        managedUser.getApplications().addAll(applicationList);
 
-        userResponseDTO.setScoringResult(scoringResultDTO);
+       User savedUser = userRepository.save(managedUser);
 
-        return userResponseDTO;
+       UserResponseDTO userResponseDTO = userMapper.toUserResponseDTO(savedUser);
+       ScoringResultResponseDTO scoringResultResponseDTO = userHelper.mapToBasicResult(extendedScoringResultDTO);
+       scoringResultResponseDTO.setApplicationResponseDTOs(userHelper.mapAppToAppDTO(savedUser));
+
+       userResponseDTO.setScoringResult(scoringResultResponseDTO);
+
+       return userResponseDTO;
     }
 
     @Override
@@ -87,4 +98,6 @@ public class UserServiceImpl implements UserService {
 
         return userMapper.toUserResponseDTO(user);
     }
+
+
 }

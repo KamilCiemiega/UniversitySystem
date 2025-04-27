@@ -1,37 +1,39 @@
 package com.kamilc.universitysystem.domain.service.serviceimpl;
 
-import com.kamilc.universitysystem.domain.dao.ApplicationRepository;
+import com.kamilc.universitysystem.domain.dao.FieldOfStudyRepository;
 import com.kamilc.universitysystem.domain.model.applicationdata.ApplicationConfigurator;
 import com.kamilc.universitysystem.domain.service.ApplicationService;
 import com.kamilc.universitysystem.entity.Application;
+import com.kamilc.universitysystem.entity.FieldOfStudy;
 import com.kamilc.universitysystem.entity.User;
-import com.kamilc.universitysystem.mapper.ApplicationMapper;
-import com.kamilc.universitysystem.web.dto.applicationdtos.ApplicationResponseDTO;
+import com.kamilc.universitysystem.web.dto.applicationdtos.ApplicationDraftDTO;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
 
 @Slf4j
 @Service
 public class ApplicationServiceImpl implements ApplicationService {
-    private final ApplicationRepository applicationRepository;
-    private final ApplicationMapper applicationMapper;
+    private final FieldOfStudyRepository fieldOfStudyRepository;
 
-    public ApplicationServiceImpl(ApplicationRepository applicationRepository, ApplicationMapper applicationMapper) {
-        this.applicationRepository = applicationRepository;
-        this.applicationMapper = applicationMapper;
+
+    public ApplicationServiceImpl(FieldOfStudyRepository fieldOfStudyRepository) {
+        this.fieldOfStudyRepository = fieldOfStudyRepository;
     }
 
-
     @Override
-    public Application save (
-            ApplicationConfigurator appConfig,
-            ApplicationResponseDTO appResponseDTO,
-            User user) {
+    public Application createApplicationForUser(ApplicationDraftDTO appDraft, User managedUser, ApplicationConfigurator appConfig) {
+        FieldOfStudy fieldOfStudy = fieldOfStudyRepository.findById(appDraft.getFieldOfStudyId())
+                .orElseThrow(() -> new EntityNotFoundException("Field of Study with ID " + appDraft.getFieldOfStudyId() + " not found"));
 
-        Application app = applicationMapper.toApplication(appResponseDTO);
-        app.setApplicationData(appConfig);
-        app.setUser(user);
+        Application newApp = new Application();
+        newApp.setUser(managedUser);
+        newApp.setApplicationData(appConfig);
+        newApp.setScore(appDraft.getScore());
+        newApp.setFieldOfStudy(fieldOfStudy);
+        newApp.setStatus(Application.Status.PENDING);
 
-        return applicationRepository.save(app);
+        return newApp;
     }
 }

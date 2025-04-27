@@ -1,20 +1,16 @@
 package com.kamilc.universitysystem.domain.service.serviceimpl;
 
-import com.kamilc.universitysystem.domain.dao.ApplicationRepository;
 import com.kamilc.universitysystem.domain.model.applicationdata.ApplicationConfigurator;
 import com.kamilc.universitysystem.domain.model.scoringconfig.RequiredSubject;
 import com.kamilc.universitysystem.domain.service.RecruitmentScoringService;
-import com.kamilc.universitysystem.domain.service.helper.scoringServiceHelpers.ScoreCalculator;
-import com.kamilc.universitysystem.entity.Application;
+import com.kamilc.universitysystem.domain.service.helper.scoringservicehelpers.ScoreCalculator;
 import com.kamilc.universitysystem.entity.FieldOfStudy;
-import com.kamilc.universitysystem.mapper.ApplicationMapper;
+import com.kamilc.universitysystem.web.dto.applicationdtos.ApplicationDraftDTO;
 import com.kamilc.universitysystem.web.dto.scoringdtos.MissingSubjectInfoDTO;
-import com.kamilc.universitysystem.web.dto.scoringdtos.ScoringResultDTO;
-import com.kamilc.universitysystem.web.dto.applicationdtos.ApplicationResponseDTO;
+import com.kamilc.universitysystem.web.dto.scoringdtos.ScoringResultExtendedDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -23,22 +19,16 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class RecruitmentScoringServiceImpl implements RecruitmentScoringService {
-
-    private final ApplicationRepository applicationRepository;
-    private final ApplicationMapper applicationMapper;
     private final ScoreCalculator scoreCalculator;
 
     @Autowired
-    public RecruitmentScoringServiceImpl(ApplicationRepository applicationRepository, ApplicationMapper applicationMapper, ScoreCalculator scoreCalculator) {
-        this.applicationRepository = applicationRepository;
-        this.applicationMapper = applicationMapper;
+    public RecruitmentScoringServiceImpl(ScoreCalculator scoreCalculator) {
         this.scoreCalculator = scoreCalculator;
     }
 
 
     @Override
-    @Transactional
-    public ScoringResultDTO calculateScore(ApplicationConfigurator app, List<FieldOfStudy> studies) {
+    public ScoringResultExtendedDTO calculateScore(ApplicationConfigurator app, List<FieldOfStudy> studies) {
         Map<String, List<MissingSubjectInfoDTO>> missingReqSubjects = verifyRequiredSubjects(app, studies);
         log.info("Field of study reqSubjects: {}", missingReqSubjects);
 
@@ -52,20 +42,17 @@ public class RecruitmentScoringServiceImpl implements RecruitmentScoringService 
             throw new IllegalArgumentException("None of the selected fields of study meet the requirements. Missing subjects: " + missingReqSubjects);
         }
 
-        ScoringResultDTO scoringResultDTO = new ScoringResultDTO();
-
-        List<ApplicationResponseDTO> savedApplicationsDTOs = generateApplicationsFromValidStudies(validStudies, app);
-
-        scoringResultDTO.setApplicationResponseDTOs(savedApplicationsDTOs);
+        ScoringResultExtendedDTO extendedResultDTO = generateExtendedScoringResultDTO(validStudies ,app);
 
         if (!missingReqSubjects.isEmpty()) {
             log.warn("Some fields of study were skipped due to missing required subjects: {}", missingReqSubjects);
-            scoringResultDTO.setRejectedApplications(missingReqSubjects);
+            extendedResultDTO.setRejectedApplications(missingReqSubjects);
         }
 
-        return scoringResultDTO;
+        return extendedResultDTO;
     }
 
+    @Override
     public Map<String, List<MissingSubjectInfoDTO>> verifyRequiredSubjects(ApplicationConfigurator app, List<FieldOfStudy> studies) {
         //English: [basic, extended]
         Map<String, Set<String>> subjectLevels = new HashMap<>();
@@ -94,17 +81,27 @@ public class RecruitmentScoringServiceImpl implements RecruitmentScoringService 
                 ));
     }
 
-    public List<ApplicationResponseDTO> generateApplicationsFromValidStudies(List<FieldOfStudy> validStudies, ApplicationConfigurator app) {
+    @Override
+    public ScoringResultExtendedDTO generateExtendedScoringResultDTO(List<FieldOfStudy> validStudies, ApplicationConfigurator app){
+        ScoringResultExtendedDTO resultExtendedDTO = new ScoringResultExtendedDTO();
+        resultExtendedDTO.setValidStudiesIDs(
+                validStudies.stream()
+                        .map(FieldOfStudy::getId)
+                        .toList()
+        );
+
+        List<ApplicationDraftDTO> appDrafts = generateScoreFromValidStudies(validStudies, app);
+        resultExtendedDTO.setApplicationDraftDTOs(appDrafts);
+
+        return resultExtendedDTO;
+    }
+
+    @Override
+    public List<ApplicationDraftDTO> generateScoreFromValidStudies(List<FieldOfStudy> validStudies, ApplicationConfigurator app){
         return validStudies.stream()
                 .map(validStudy -> {
                     BigDecimal score = scoreCalculator.calculateScoreForFieldOfStudy(app, validStudy);
-
-                    ApplicationResponseDTO applicationResponseDTO = new ApplicationResponseDTO();
-                    applicationResponseDTO.setScore(score);
-                    applicationResponseDTO.setStatus(Application.Status.PENDING);
-                    applicationResponseDTO.setFieldOfStudyId(validStudy.getId());
-
-                    return  applicationResponseDTO;
+                    return new ApplicationDraftDTO(validStudy.getId(), score);
                 })
                 .toList();
     }

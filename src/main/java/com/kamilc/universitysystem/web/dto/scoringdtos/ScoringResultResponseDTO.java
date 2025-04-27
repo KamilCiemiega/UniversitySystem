@@ -16,7 +16,7 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ScoringResultDTO {
+public class ScoringResultResponseDTO {
     private List<ApplicationResponseDTO> applicationResponseDTOs = new ArrayList<>();
     private Map<String, List<MissingSubjectInfoDTO>> rejectedApplications = new HashMap<>();
 }

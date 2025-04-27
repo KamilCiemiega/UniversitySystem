@@ -1,6 +1,6 @@
 package com.kamilc.universitysystem.web.dto.userdtos;
 
-import com.kamilc.universitysystem.web.dto.scoringdtos.ScoringResultDTO;
+import com.kamilc.universitysystem.web.dto.scoringdtos.ScoringResultResponseDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,5 +15,5 @@ import java.time.LocalDateTime;
 public class UserResponseDTO {
     private Integer id;
     private LocalDateTime createdAt;
-    private ScoringResultDTO scoringResult;
+    private ScoringResultResponseDTO scoringResult;
 }

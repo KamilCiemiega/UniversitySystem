@@ -1,4 +1,4 @@
-package com.kamilc.universitysystem.domain.service.helper.scoringServiceHelpers;
+package com.kamilc.universitysystem.domain.service.helper.scoringservicehelpers;
 
 import com.kamilc.universitysystem.domain.model.applicationdata.StudentResult;
 import org.springframework.stereotype.Component;
