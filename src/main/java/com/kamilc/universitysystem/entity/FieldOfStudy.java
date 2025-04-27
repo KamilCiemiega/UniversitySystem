@@ -61,7 +61,7 @@ public class FieldOfStudy {
     @ManyToMany(mappedBy = "fieldsOfStudy")
     private List<User> users = new ArrayList<>();
 
-    @OneToMany(mappedBy = "", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "fieldOfStudy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Application> applications = new ArrayList<>();
 
     public enum StudyType {

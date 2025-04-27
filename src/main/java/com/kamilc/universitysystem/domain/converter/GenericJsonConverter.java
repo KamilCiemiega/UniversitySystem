@@ -34,7 +34,7 @@ public abstract class GenericJsonConverter<T> implements AttributeConverter<T, S
         try {
             return objectMapper.readValue(dbData, type);
         } catch (IOException e) {
-            throw new IllegalArgumentException("Can't read JSON-a", e);
+            throw new IllegalArgumentException("Can't read JSON", e);
         }
     }
 }

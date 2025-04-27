@@ -51,11 +51,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUserWithApplications(User user) {
-
-    }
-
-    @Override
     @Transactional
     public UserResponseDTO register(NewUserDTO newUserDTO) {
         User user = userMapper.toEntity(newUserDTO);
@@ -90,7 +85,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDTO login(LoginUserDTO loginUserDTO) {
         User user = userRepository.findByEmail(loginUserDTO.getEmail())
-                .orElseThrow(() -> new EntityNotFoundException("User with email " + loginUserDTO.getEmail() + " not found"));
+                .orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
 
         if (!passwordEncoder.matches(loginUserDTO.getPassword(), user.getPassword())) {
             throw new BadCredentialsException("Invalid email or password");
