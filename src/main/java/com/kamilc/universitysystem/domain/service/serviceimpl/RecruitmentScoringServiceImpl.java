@@ -86,8 +86,8 @@ public class RecruitmentScoringServiceImpl implements RecruitmentScoringService 
         ScoringResultExtendedDTO resultExtendedDTO = new ScoringResultExtendedDTO();
         resultExtendedDTO.setValidStudiesIDs(
                 validStudies.stream()
-                        .map(FieldOfStudy::getId)
-                        .toList()
+//                        .map(FieldOfStudy::getId)
+//                        .toList()
         );
 
         List<ApplicationDraftDTO> appDrafts = generateScoreFromValidStudies(validStudies, app);
