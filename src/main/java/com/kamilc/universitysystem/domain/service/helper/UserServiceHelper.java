@@ -17,12 +17,12 @@ import java.util.List;
 
 @Component
 @Slf4j
-public class UserHelper {
+public class UserServiceHelper {
     private final ApplicationMapper applicationMapper;
     private final ApplicationService applicationService;
 
     @Autowired
-    public UserHelper(ApplicationMapper applicationMapper, ApplicationService applicationService) {
+    public UserServiceHelper(ApplicationMapper applicationMapper, ApplicationService applicationService) {
         this.applicationMapper = applicationMapper;
         this.applicationService = applicationService;
     }

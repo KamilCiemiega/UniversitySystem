@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Getter
@@ -12,5 +13,5 @@ import java.util.Map;
 public class ScoringRules {
     @JsonProperty("level_multipliers")
     @NotEmpty(message = "Level multipliers cannot be empty")
-    private Map<String, Double> levelMultipliers;
+    private Map<String, BigDecimal> levelMultipliers;
 }

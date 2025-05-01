@@ -1,6 +1,5 @@
 package com.kamilc.universitysystem.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kamilc.universitysystem.domain.converter.ScoringConverter;
 import com.kamilc.universitysystem.domain.model.scoringconfig.ScoringConfiguration;
 import jakarta.persistence.*;

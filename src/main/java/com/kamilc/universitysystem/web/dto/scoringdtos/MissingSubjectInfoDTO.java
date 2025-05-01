@@ -11,13 +11,11 @@ import lombok.Setter;
 @Setter
 public class MissingSubjectInfoDTO {
     String subjectName;
-    String requiredLevel;
 
     @Override
     public String toString() {
         return "MissingSubjectInfoDTO{" +
                 "subjectName='" + subjectName + '\'' +
-                ", requiredLevel='" + requiredLevel + '\'' +
                 '}';
     }
 }

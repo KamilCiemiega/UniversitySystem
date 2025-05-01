@@ -12,9 +12,9 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
-class TestDataFactory {
+public class TestDataFactory {
 
-    protected  ScoringConfiguration createITScoringConfig() {
+    public  ScoringConfiguration createITScoringConfig() {
         ScoringConfiguration config = new ScoringConfiguration();
 
         ScoringRules rules = new ScoringRules();
@@ -39,7 +39,7 @@ class TestDataFactory {
         return config;
     }
 
-    protected ScoringConfiguration createRoboticsScoringConfig() {
+    public ScoringConfiguration createRoboticsScoringConfig() {
         ScoringConfiguration config = new ScoringConfiguration();
 
         ScoringRules rules = new ScoringRules();
@@ -63,10 +63,9 @@ class TestDataFactory {
         return config;
     }
 
-    protected RequiredSubject createRequiredSubject(String name, String level, double weight, boolean required) {
+    public RequiredSubject createRequiredSubject(String name, String level, double weight, boolean required) {
         RequiredSubject subject = new RequiredSubject();
         subject.setName(name);
-        subject.setLevel(level);
         subject.setWeight(weight);
         subject.setRequired(required);
         return subject;

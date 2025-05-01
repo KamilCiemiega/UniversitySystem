@@ -54,7 +54,6 @@ public class RecruitmentScoringServiceImpl implements RecruitmentScoringService 
 
     @Override
     public Map<String, List<MissingSubjectInfoDTO>> verifyRequiredSubjects(ApplicationConfigurator app, List<FieldOfStudy> studies) {
-        //English: [basic, extended]
         Map<String, Set<String>> subjectLevels = new HashMap<>();
         app.getStudentResults()
                 .forEach(studentResult ->
@@ -69,11 +68,10 @@ public class RecruitmentScoringServiceImpl implements RecruitmentScoringService 
                         .filter(RequiredSubject::isRequired)
                         .filter(subj -> {
                             String name = subj.getName();
-                            String level = subj.getLevel();
-                            Set<String> applicantLevels = subjectLevels.getOrDefault(name, Set.of());
-                            return !applicantLevels.contains(level);
+                            Set<String> applicantLevels = subjectLevels.getOrDefault(subj.getName(), Set.of());
+                            return applicantLevels.isEmpty();
                         })
-                        .map(subj -> Map.entry(fos.getName(), new MissingSubjectInfoDTO(subj.getName(), subj.getLevel())))
+                        .map(subj -> Map.entry(fos.getName(), new MissingSubjectInfoDTO(subj.getName())))
                 )
                 .collect(Collectors.groupingBy(
                         Map.Entry::getKey,
@@ -86,18 +84,18 @@ public class RecruitmentScoringServiceImpl implements RecruitmentScoringService 
         ScoringResultExtendedDTO resultExtendedDTO = new ScoringResultExtendedDTO();
         resultExtendedDTO.setValidStudiesIDs(
                 validStudies.stream()
-//                        .map(FieldOfStudy::getId)
-//                        .toList()
+                        .map(FieldOfStudy::getId)
+                        .toList()
         );
 
-        List<ApplicationDraftDTO> appDrafts = generateScoreFromValidStudies(validStudies, app);
+        List<ApplicationDraftDTO> appDrafts = generateScoreForValidStudies(validStudies, app);
         resultExtendedDTO.setApplicationDraftDTOs(appDrafts);
 
         return resultExtendedDTO;
     }
 
     @Override
-    public List<ApplicationDraftDTO> generateScoreFromValidStudies(List<FieldOfStudy> validStudies, ApplicationConfigurator app){
+    public List<ApplicationDraftDTO> generateScoreForValidStudies(List<FieldOfStudy> validStudies, ApplicationConfigurator app){
         return validStudies.stream()
                 .map(validStudy -> {
                     BigDecimal score = scoreCalculator.calculateScoreForFieldOfStudy(app, validStudy);

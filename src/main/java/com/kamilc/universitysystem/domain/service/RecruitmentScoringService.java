@@ -18,7 +18,7 @@ public interface RecruitmentScoringService {
            List<FieldOfStudy> studies
    );
    ScoringResultExtendedDTO generateExtendedScoringResultDTO(List<FieldOfStudy> validStudies, ApplicationConfigurator app);
-   List<ApplicationDraftDTO> generateScoreFromValidStudies(
+   List<ApplicationDraftDTO> generateScoreForValidStudies(
            List<FieldOfStudy> validStudies,
            ApplicationConfigurator app
    );

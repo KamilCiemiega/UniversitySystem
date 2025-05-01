@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 public class RequiredSubject {
@@ -12,11 +14,8 @@ public class RequiredSubject {
     private String name;
 
     @NotNull(message = "Subject weight must not be null")
-    private Double weight;
+    private BigDecimal weight;
 
     @NotNull(message = "Field 'required' must be specified")
     private boolean required;
-
-    @NotBlank(message = "Subject level is required")
-    private String level;
 }
