@@ -27,7 +27,7 @@ public class ScoringHelper {
                BigDecimal subjectWeight = requiredSubject.getWeight();
 
 
-              })
+//              })
 
  }
 
