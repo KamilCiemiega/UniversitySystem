@@ -43,9 +43,9 @@ public class ScoringHelper {
 
  }
 
- public void verifierMinRequiredPoints(Double ObtainedPoints, Double minRequiredPoints){
-
- }
+// public void verifierMinRequiredPoints(Double ObtainedPoints, Double minRequiredPoints){
+//
+// }
 
 }
 
